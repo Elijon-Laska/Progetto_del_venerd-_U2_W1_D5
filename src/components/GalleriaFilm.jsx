@@ -17,13 +17,22 @@ class GalleriaFilm extends Component {
     fetch(`http://www.omdbapi.com/?apikey=efc305e5&s=${this.props.query}`)
       .then((response) => response.json())
       .then((data) => {
-        const movies = data.Search || [];
+        let movies = data.Search || [];
+        movies = this.mischiaArray(movies);
         this.setState({ movies, loading: false }, this.loadMoreMovies);
       })
       .catch((error) => {
         this.setState({ error: "Movies not found", loading: false });
         console.log(error);
       });
+  };
+
+  mischiaArray = (array) => {
+    for (let i = array.length - 1; i > 0; i--) {
+      const arrayMischiato = Math.floor(Math.random() * (i + 1));
+      [array[i], array[arrayMischiato]] = [array[arrayMischiato], array[i]];
+    }
+    return array;
   };
 
   getRandomMovies = (movies, count) => {
